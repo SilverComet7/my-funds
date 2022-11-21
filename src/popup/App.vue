@@ -139,7 +139,7 @@
             <tr>
               <th class="align-left">基金名称（{{ dataList.length }}）</th>
               <th v-if="isEdit">基金代码</th>
-              <th v-if="showGSZ && !isEdit">估算净值</th>
+              <!-- <th v-if="showGSZ && !isEdit">估算净值</th> -->
               <th
                 style="text-align:center"
                 v-if="isEdit && (showCostRate || showCost)"
@@ -166,6 +166,7 @@
                 持有收益率
                 <span :class="sortType.costGainsRate" class="down-arrow"></span>
               </th>
+              
               <th @click="sortList('gszzl')" class="pointer">
                 涨跌幅
                 <span :class="sortType.gszzl" class="down-arrow"></span>
@@ -774,8 +775,10 @@ export default {
           "sortTypeObj",
         ],
         (res) => {
+          console.log(res);
           this.fundList = res.fundList ? res.fundList : this.fundList;
           if (res.fundListM) {
+            console.log();
             this.fundListM = res.fundListM;
           } else {
             for (const fund of this.fundList) {
@@ -1028,12 +1031,13 @@ export default {
       let fundlist = this.fundListM.map((val) => val.code).join(",");
       let url =
         "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=" +
-        this.userId +
+        this.userId || '6ae3862-f43d-4158-afc6-f89b5e263a4a' +
         "&Fcodes=" +
         fundlist;
       this.$axios
         .get(url)
         .then((res) => {
+          console.log(res);
           this.loadingList = false;
           let data = res.data.Datas;
           this.dataList = [];
